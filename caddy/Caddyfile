@@ -1,0 +1,11 @@
+askfriday.com {
+    encode gzip zstd
+    reverse_proxy /api/* localhost:9090
+    file_server
+    root * /var/www/askfriday
+    try_files {path} /index.html
+}
+
+www.askfriday.com {
+    redir https://askfriday.com{uri}
+}
