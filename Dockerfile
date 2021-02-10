@@ -6,5 +6,5 @@ RUN yarn build
 
 FROM caddy:2.3.0
 WORKDIR /var/www/askfriday
-COPY --from=builder /dist .
+COPY --from=builder /askfriday/dist .
 COPY caddy/Caddyfile /etc/caddy/Caddyfile
