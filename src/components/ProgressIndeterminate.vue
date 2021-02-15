@@ -21,7 +21,7 @@ export default {
   content: '';
   height: 4rem;
   width: 4rem;
-  background: var(--color-primary);
+  background: var(--color-link-text);
   border-radius: 50%;
   animation: progress-scale 1.3s 0s ease-in-out infinite;
 }

@@ -1,8 +1,8 @@
 <template>
   <div class="root">
-    <SearchForm :search="search" v-model="text" v-if="showForm" @search="search"/>
+    <SearchForm :small="response" :search="search" v-model="text" @search="search"/>
     <ProgressIndeterminate v-if="showProgress"/>
-    <ResponseDisplay :search-response="response" v-if="showResponse"/>
+    <ResponseDisplay :search-text="text" :search-response="response" v-if="showResponse"/>
   </div>
 </template>
 
@@ -21,9 +21,6 @@ export default {
     response: undefined
   }),
   computed: {
-    showForm() {
-      return !this.searching && !this.response;
-    },
     showResponse() {
       return !this.searching && this.response;
     },
@@ -40,11 +37,16 @@ export default {
   },
   methods: {
     async search(replaceRoute = true) {
-      this.searching = true;
-      this.response = await search(this.text);
-      this.searching = false;
-      if (replaceRoute) {
-        return this.$router.replace({ path: '/', query: { q: encodeURIComponent(this.text) } });
+      try {
+        this.searching = true;
+        this.response = await search(this.text);
+        if (replaceRoute) {
+          return this.$router.replace({ path: '/', query: { q: encodeURIComponent(this.text) } });
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        this.searching = false;
       }
     }
   }

@@ -1,14 +1,16 @@
 <template>
   <div class="response-display">
-    <div class="markdown" v-if="isMarkdown" v-html="markdown"></div>
+    <Markdown :html="html" v-if="isMarkdown"/>
   </div>
 </template>
 
 <script>
 import marked from 'marked';
+import Markdown from '@/components/Markdown';
 
 export default {
   name: 'ResponseDisplay',
+  components: { Markdown },
   props: {
     searchResponse: Object
   },
@@ -16,9 +18,10 @@ export default {
     isMarkdown() {
       return ('markdown' in this.searchResponse);
     },
-    markdown() {
+    html() {
       if (this.isMarkdown) {
-        return marked(this.searchResponse.markdown.trim(), { gfm: true, breaks: true, smartLists: true, smartypants: true });
+        const { markdown } = this.searchResponse;
+        return marked(markdown.trim(), { gfm: true, breaks: true, smartLists: true, smartypants: true });
       }
       return undefined;
     },
@@ -39,9 +42,19 @@ img {
 </style>
 
 <style scoped>
-.response-display > .markdown {
+.response-display {
   text-align: left;
   margin: 1rem auto 4rem auto;
   width: 70ch;
+}
+</style>
+
+<style>
+.response-display h2 {
+  margin-top: 6rem;
+}
+
+.response-display h2:first-of-type {
+  margin-top: 0;
 }
 </style>
