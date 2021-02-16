@@ -19,6 +19,7 @@ export default {
   --color-link-text: #00458B;
   --color-heading-1: #00458B;
   --color-heading-2: #1A2238;
+  --color-error-text: #770606;
 }
 
 html {

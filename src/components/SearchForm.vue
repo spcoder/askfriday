@@ -31,7 +31,7 @@ export default {
 <style scoped>
 .root.small {
   text-align: left;
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 2rem;
 }
 
 .root > .search-form {

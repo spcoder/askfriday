@@ -44,7 +44,7 @@ img {
 <style scoped>
 .response-display {
   text-align: left;
-  margin: 1rem auto 4rem auto;
+  margin: 1rem 2rem 4rem 2rem;
   width: 70ch;
 }
 </style>

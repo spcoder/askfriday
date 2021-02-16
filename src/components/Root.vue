@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <SearchForm :small="response" v-model="text" @search="search" v-if="showSearchForm"/>
+    <SearchForm :small="!!response" v-model="text" @search="search" v-if="showSearchForm"/>
     <ProgressIndeterminate v-if="showProgress"/>
     <ResponseDisplay :search-text="text" :search-response="response" v-if="showResponse"/>
   </div>
@@ -20,7 +20,8 @@ export default {
     showSearchForm: false,
     showProgress: false,
     showResponse: false,
-    response: undefined
+    response: undefined,
+    error: undefined
   }),
   created() {
     const { q } = this.$route.query;
@@ -33,8 +34,14 @@ export default {
     }
   },
   methods: {
+    replaceURL() {
+      if (this.$route.query.q !== this.text) {
+        this.$router.replace({ path: '/', query: { q: this.text } });
+      }
+    },
     async search() {
       try {
+        this.showResponse = false;
         if (this.showSearchForm) {
           this.showProgress = true;
         }
@@ -44,10 +51,14 @@ export default {
         } else {
           this.showSearchForm = true;
           this.showResponse = true;
-          return this.$router.replace({ path: '/', query: { q: this.text } });
+          this.replaceURL();
         }
       } catch (err) {
         console.error(err);
+        this.response = { markdown: '' + err };
+        this.showSearchForm = true;
+        this.showResponse = true;
+        this.replaceURL();
       } finally {
         this.showProgress = false;
       }
