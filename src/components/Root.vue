@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <SearchForm :small="response" :search="search" v-model="text" @search="search"/>
+    <SearchForm :small="response" v-model="text" @search="search" v-if="showSearchForm"/>
     <ProgressIndeterminate v-if="showProgress"/>
     <ResponseDisplay :search-text="text" :search-response="response" v-if="showResponse"/>
   </div>
@@ -17,36 +17,39 @@ export default {
   components: { ProgressIndeterminate, SearchForm, ResponseDisplay },
   data: () => ({
     text: '',
-    searching: false,
+    showSearchForm: false,
+    showProgress: false,
+    showResponse: false,
     response: undefined
   }),
-  computed: {
-    showResponse() {
-      return !this.searching && this.response;
-    },
-    showProgress() {
-      return this.searching;
-    }
-  },
   created() {
     const { q } = this.$route.query;
     if (q) {
       this.text = decodeURIComponent('' + q);
-      this.search(false);
+      this.search();
+    }
+    if (!this.text) {
+      this.showSearchForm = true;
     }
   },
   methods: {
-    async search(replaceRoute = true) {
+    async search() {
       try {
-        this.searching = true;
+        if (this.showSearchForm) {
+          this.showProgress = true;
+        }
         this.response = await search(this.text);
-        if (replaceRoute) {
-          return this.$router.replace({ path: '/', query: { q: encodeURIComponent(this.text) } });
+        if ('redirect' in this.response) {
+          window.location.href = this.response.redirect;
+        } else {
+          this.showSearchForm = true;
+          this.showResponse = true;
+          return this.$router.replace({ path: '/', query: { q: this.text } });
         }
       } catch (err) {
         console.error(err);
       } finally {
-        this.searching = false;
+        this.showProgress = false;
       }
     }
   }
