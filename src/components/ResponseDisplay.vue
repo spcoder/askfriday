@@ -6,7 +6,7 @@
 
 <script>
 import marked from 'marked';
-import Markdown from '@/components/Markdown';
+import Markdown from './Markdown';
 
 export default {
   name: 'ResponseDisplay',

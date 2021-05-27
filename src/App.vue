@@ -30,6 +30,7 @@ html {
   font-family: -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-appearance: none;
   box-sizing: border-box;
 }
 
